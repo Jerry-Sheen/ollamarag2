@@ -15,13 +15,34 @@ import requests
 #response = llm.invoke("아재 개그를 해줘")
 #print(response)
 
-# Ollama 호스트 설정
-os.environ['OLLAMA_HOST'] = 'http://localhost:11434'
+# 환경 변수 설정
+load_dotenv()
+OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://localhost:11434')  # 기본값 설정
 
-load_dotenv()  # .env 파일에서 환경 변수 로드
+def connect_ollama():
+    """Ollama 서버 연결 테스트"""
+    try:
+        response = requests.get(f"{OLLAMA_HOST}/api/tags")
+        return response.status_code == 200
+    except:
+        return False
 
-# Ollama API 엔드포인트
-OLLAMA_URL = f"{os.environ['OLLAMA_HOST']}/api/generate"
+def generate_text(input_text, whatToAsk, language):
+    try:
+        if not connect_ollama():
+            raise ConnectionError("Ollama 서버 연결 실패")
+            
+        # 나머지 코드는 동일
+        # ...
+        
+    except Exception as e:
+        st.error(f"연결 오류: {str(e)}")
+        st.markdown("""
+        **해결 방법 체크리스트**
+        1. 원격 서버에서 Ollama 실행 확인
+        2. 방화벽에서 11434 포트 개방
+        3. `OLLAMA_HOST` 환경변수 설정 확인
+        """)
 
 def createChain(llm, output_parser):
     from langchain_core.prompts import ChatPromptTemplate
@@ -64,7 +85,7 @@ def generate_text(input_text, whatToAsk, language):
 
 
 def main():
-    st.title('KRIBB AI Network')
+    st.title('KRIBB AI Network2')
 
     # Get user input for topic of the poem
     input_text = st.text_input('Throw a question, please!')
