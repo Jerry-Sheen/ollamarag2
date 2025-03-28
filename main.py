@@ -5,12 +5,23 @@ from langchain_community.callbacks import get_openai_callback
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.manager import CallbackManager
 from my_modules import modelName
+from dotenv import load_dotenv
+import requests
+
 # from langchain_sidebar_content import LC_QuickStart_01
 # from langchain_ollama import OllamaLLM
 
 #llm = Ollama(model="gemma:7b", temperature=0)
 #response = llm.invoke("아재 개그를 해줘")
 #print(response)
+
+# Ollama 호스트 설정
+os.environ['OLLAMA_HOST'] = 'http://localhost:11434'
+
+load_dotenv()  # .env 파일에서 환경 변수 로드
+
+# Ollama API 엔드포인트
+OLLAMA_URL = f"{os.environ['OLLAMA_HOST']}/api/generate"
 
 def createChain(llm, output_parser):
     from langchain_core.prompts import ChatPromptTemplate
@@ -53,7 +64,7 @@ def generate_text(input_text, whatToAsk, language):
 
 
 def main():
-    st.title('오창분원 인공지능 만들기')
+    st.title('KRIBB AI Network')
 
     # Get user input for topic of the poem
     input_text = st.text_input('Throw a question, please!')

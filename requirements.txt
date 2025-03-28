@@ -12,3 +12,4 @@ langchain-community
 langchain-core
 ollama
 python-dotenv
+requests
